@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>23 de Enero del 2025 - 20:19Hrs.</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        iframe {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            border: none;
+        }
+
+        .BoxTitulo h1 {
+            font-family: Arial, sans-serif;
+            color: white;
+            margin: 0;
+        }
+
+        #currentDateTime {
+            font-size: 2rem;
+        }
+
+        #seconds {
+            color: red;
+        }
+
+        .mainText {
+            position: relative;
+            top: 20px;
+            left: 20px;
+            width: 90%;
+            text-align: justify;
+            line-height: 1.5;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        #hiddenContent {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            color: lightblue;
+        }
+
+        .buttons {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .red {
+            background-color: red;
+            color: white;
+        }
+
+        .blue {
+            background-color: blue;
+            color: white;
+        }
+
+        #storedTime {
+            margin-top: 20px;
+            color: lightgreen;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Fondo interactivo -->
+    <iframe src="https://paveldogreat.github.io/WebGL-Fluid-Simulation/"></iframe>
+
+    <!-- Título dinámico -->
+    <div class="BoxTitulo">
+        <h1 id="currentDateTime"></h1>
+    </div>
+
+    <!-- Texto principal -->
+    <div id="content">
+        <div class="mainText">
+            <p>
+                ¡Bienvenida!
+                Quiero mencionarte un par de cosas antes de que continues: <br>
+                1.- Presiona el botón que dice: <span style="color: darkred;"><b>"Close Controls"</b></span> para que no te estorben. <br>
+                2.- El botón rojo ocultará todo el contenido de texto existente en la página. La finalidad de esto es que
+                puedas utilizar el fondo para jugar un poco pasando el dedo por la pantalla. <br>
+                3.- El reloj que coloqué se actualiza en tiempo real, y en determinadas horas o momentos del día; el
+                mensaje que se muestra al inicio, será diferente. <br>
+                4.- Al hacer click sobre el <span style="color: rgb(0, 100, 155);"><b>botón azul</b></span> desplegarás
+                el siguiente bloque que aloja el texto que no puedes leer. No lo hagas si no es momento. No creo que lo
+                abras, pero en fin. Depende de ti. <br>
+            </p>
+        </div>
+
+        <!-- Bloque oculto -->
+        <div id="hiddenContent">
+            <p>
+                Este es el texto oculto. No deberías estar viéndolo... ¿Por qué lo hiciste? 🤔
+            </p>
+        </div>
+
+        <!-- Hora almacenada -->
+        <div id="storedTime"></div>
+    </div>
+
+    <!-- Botones -->
+    <div class="buttons">
+        <button class="red" onclick="hideAllContent()">Ocultar contenido</button>
+        <button class="blue" onclick="toggleHiddenContent()">Mostrar/Ocultar texto oculto</button>
+    </div>
+
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            // Determinar el mensaje según la hora
+            let message = '';
+            if (hours === 0) message = 'Ya pasa de media noche, deberías dormir...';
+            else if (hours === 1) message = '¿Sabías que AM significa Antes del Meridiano?';
+            else if (hours === 2) message = '¿Es en serio? ¿Aún aquí?';
+            else if (hours === 3) message = 'Tic-toc... tic-toc...';
+            else if (hours === 4) message = 'Despertarás en 4 horas... Es un diminuto recordatorio...';
+            else if (hours === 5) message = 'El anterior programador se cansó de esperar y contrataron uno nuevo - Bob Esponja.';
+            else if (hours >= 6 && hours < 7) message = 'Buen día...';
+            else if (hours >= 7 && hours < 12) message = 'Tomar una ducha, preparar el desayuno, ir al trabajo, blah, blah...';
+            else if (hours >= 12 && hours < 14) message = 'Buen turno, cuida tu corazón de las camotizas, corrompen hasta al más pacífico.';
+            else if (hours >= 14 && hours < 19) message = 'Media jornada terminada, tómate un respiro.';
+            else if (hours >= 19 && hours < 23) message = 'Aun cuando esté ausente, siempre estaré presente. :)';
+            else if (hours >= 23 && hours < 24) message = 'Cuéntame de tu día...';
+
+            // Formatear hora
+            const formattedTime = `${hours % 12 || 12}:${minutes.toString().padStart(2, '0')}:<span id="seconds">${seconds.toString().padStart(2, '0')}</span> ${hours >= 12 ? 'PM' : 'AM'}`;
+
+            // Actualizar título dinámico
+            document.getElementById('currentDateTime').innerHTML = `${formattedTime} - ${message}`;
+        }
+
+        function hideAllContent() {
+            document.getElementById('content').style.display = 'none'; // Ocultar todo el contenido
+            document.querySelector('.buttons').style.display = 'none'; // Ocultar los botones
+            document.getElementById('currentDateTime').style.display = 'none'; // Ocultar hora y mensaje
+        }
+
+        function toggleHiddenContent() {
+            const hiddenContent = document.getElementById('hiddenContent');
+            hiddenContent.style.display = hiddenContent.style.display === 'block' ? 'none' : 'block';
+
+            // Realizar la solicitud HTTP a Jarvis cuando se presiona el botón azul
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            const formattedTime = `${hours % 12 || 12}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} ${hours >= 12 ? 'PM' : 'AM'}`;
+
+            // Enviar notificación a Jarvis con la hora en la que se presionó el botón
+            const data = {
+                action: "button_pressed",
+                time: formattedTime
+            };
+
+            fetch('http://127.0.0.1:11434/notify', {  // Cambiar por la URL de tu servidor de Jarvis
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Notificación enviada a Jarvis:', data);
+            })
+            .catch(error => {
+                console.error('Error al enviar la notificación a Jarvis:', error);
+            });
+        }
+
+        // Actualizar fecha y hora cada segundo
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+    </script>
+</body>
+
+</html>
