@@ -41,7 +41,7 @@
             position: relative;
             top: 20px;
             left: 20px;
-            width: 90%;
+            width: 90%; /* Ajusta el ancho del texto */
             text-align: justify;
             line-height: 1.5;
             background-color: rgba(0, 0, 0, 0.5);
@@ -49,51 +49,36 @@
             border-radius: 8px;
         }
 
-        #hiddenContent {
-            display: none;
-            margin-top: 20px;
-            padding: 10px;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 8px;
-            color: lightblue;
-        }
-
-        .buttons {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-        }
-
-        button {
+        /* Botones */
+        .button {
             padding: 10px 20px;
-            font-size: 1rem;
-            margin-right: 10px;
-            border: none;
-            border-radius: 5px;
+            font-size: 16px;
+            margin: 10px;
             cursor: pointer;
+            border-radius: 5px;
+            border: none;
         }
 
-        .red {
+        .button-red {
             background-color: red;
             color: white;
         }
 
-        .blue {
+        .button-blue {
             background-color: blue;
             color: white;
         }
 
-        #storedTime {
-            margin-top: 20px;
-            color: lightgreen;
-            font-size: 1.2rem;
+        /* Estilo para ocultar contenido */
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 
 <body>
-    <!-- Fondo interactivo -->
-    <iframe src="https://paveldogreat.github.io/WebGL-Fluid-Simulation/"></iframe>
+    <!-- Fondo interactivo desde GitHub -->
+    <iframe src="https://raw.githubusercontent.com/Ivanovas1/fluidpage/d29ebd510c34a034c0a5b04a6320a10d392734ed/fluid.html"></iframe>
 
     <!-- Título dinámico -->
     <div class="BoxTitulo">
@@ -101,40 +86,25 @@
     </div>
 
     <!-- Texto principal -->
-    <div id="content">
-        <div class="mainText">
-            <p>
-                ¡Bienvenida!
-                Quiero mencionarte un par de cosas antes de que continues: <br>
-                1.- Presiona el botón que dice: <span style="color: darkred;"><b>"Close Controls"</b></span> para que no te estorben. <br>
-                2.- El botón rojo ocultará todo el contenido de texto existente en la página. La finalidad de esto es que
-                puedas utilizar el fondo para jugar un poco pasando el dedo por la pantalla. <br>
-                3.- El reloj que coloqué se actualiza en tiempo real, y en determinadas horas o momentos del día; el
-                mensaje que se muestra al inicio, será diferente. <br>
-                4.- Al hacer click sobre el <span style="color: rgb(0, 100, 155);"><b>botón azul</b></span> desplegarás
-                el siguiente bloque que aloja el texto que no puedes leer. No lo hagas si no es momento. No creo que lo
-                abras, pero en fin. Depende de ti. <br>
-            </p>
-        </div>
-
-        <!-- Bloque oculto -->
-        <div id="hiddenContent">
-            <p>
-                Este es el texto oculto. No deberías estar viéndolo... ¿Por qué lo hiciste? 🤔
-            </p>
-        </div>
-
-        <!-- Hora almacenada -->
-        <div id="storedTime"></div>
+    <div class="mainText">
+        <p>
+            ¡Bienvenida!<br>
+            Quiero mencionarte un par de cosas antes de que continues: <br>
+            1.- Presiona el boton que dice: <span style="color: darkred;"><b>"Close Controls"</b></span> para que no te estorben. <br>
+            2.- El boton rojo ocultará todo el contenido de texto existente en la pagina. La finalidad de esto es que puedas utilizar el fondo para jugar un poco pasando el dedo por la pantalla. <br>
+            3.- El reloj que coloqué se actualiza en tiempo real, y en determinadas horas o momentos del dia; el mensaje que se muestra al inicio, sera diferente. <br>
+            4.- Al hacer click sobre el <span style="color: rgb(0, 100, 155);"><b>botón azúl</b></span> desplegarás el siguiente bloque que aloja el texto que no puedes leer. No lo hagas si no es momento. No creo que lo abras, pero en fin. Depende de ti. <br>
+        </p>
     </div>
 
     <!-- Botones -->
-    <div class="buttons">
-        <button class="red" onclick="hideAllContent()">Ocultar contenido</button>
-        <button class="blue" onclick="toggleHiddenContent()">Mostrar/Ocultar texto oculto</button>
+    <div>
+        <button class="button button-red" id="toggleContentButton">Ocultar contenido</button>
+        <button class="button button-blue" id="toggleTextButton">Mostrar bloque oculto</button>
     </div>
 
     <script>
+        // Función para actualizar la hora y el mensaje dinámico
         function updateDateTime() {
             const now = new Date();
             const hours = now.getHours();
@@ -163,50 +133,40 @@
             document.getElementById('currentDateTime').innerHTML = `${formattedTime} - ${message}`;
         }
 
-        function hideAllContent() {
-            document.getElementById('content').style.display = 'none'; // Ocultar todo el contenido
-            document.querySelector('.buttons').style.display = 'none'; // Ocultar los botones
-            document.getElementById('currentDateTime').style.display = 'none'; // Ocultar hora y mensaje
-        }
-
-        function toggleHiddenContent() {
-            const hiddenContent = document.getElementById('hiddenContent');
-            hiddenContent.style.display = hiddenContent.style.display === 'block' ? 'none' : 'block';
-
-            // Realizar la solicitud HTTP a Jarvis cuando se presiona el botón azul
-            const now = new Date();
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const seconds = now.getSeconds();
-
-            const formattedTime = `${hours % 12 || 12}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} ${hours >= 12 ? 'PM' : 'AM'}`;
-
-            // Enviar notificación a Jarvis con la hora en la que se presionó el botón
-            const data = {
-                action: "button_pressed",
-                time: formattedTime
-            };
-
-            fetch('http://127.0.0.1:11434/notify', {  // Cambiar por la URL de tu servidor de Jarvis
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Notificación enviada a Jarvis:', data);
-            })
-            .catch(error => {
-                console.error('Error al enviar la notificación a Jarvis:', error);
-            });
-        }
-
         // Actualizar fecha y hora cada segundo
         setInterval(updateDateTime, 1000);
         updateDateTime();
+
+        // Botón para ocultar contenido
+        document.getElementById("toggleContentButton").addEventListener("click", function () {
+            document.body.classList.toggle("hidden");
+        });
+
+        // Botón para mostrar texto oculto
+        document.getElementById("toggleTextButton").addEventListener("click", function () {
+            const timePressed = new Date();
+            const data = {
+                action: "buttonPressed",
+                timePressed: timePressed.toISOString(),
+            };
+
+            fetch("http://localhost:5000/button_pressed", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Notificación enviada:", data);
+            })
+            .catch((error) => {
+                console.error("Error al enviar la notificación:", error);
+            });
+        });
     </script>
+
 </body>
 
 </html>
