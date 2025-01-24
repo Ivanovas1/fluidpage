@@ -4,22 +4,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>23 de Enero del 2025 - 20:19Hrs.</title>
+    <title>Simulador de Ordenador</title>
     <style>
         body {
             margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #222;
+        }
+
+        .computer-screen {
+            position: relative;
+            width: 80vw;
+            height: 80vh;
             background-color: black;
-            color: white;
-            font-family: Arial, sans-serif;
+            border: 16px solid #444;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+        }
+
+        .screen-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
         }
 
         iframe {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
+            width: 100%;
+            height: 100%;
             border: none;
         }
 
@@ -27,91 +48,94 @@
             font-family: Arial, sans-serif;
             color: white;
             margin: 0;
-        }
-
-        #currentDateTime {
-            font-size: 2rem;
-        }
-
-        #seconds {
-            color: red;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1;
         }
 
         .mainText {
-            position: relative;
-            top: 20px;
+            position: absolute;
+            top: 100px;
             left: 20px;
-            width: 90%; /* Ajusta el ancho del texto */
+            width: calc(100% - 40px);
             text-align: justify;
             line-height: 1.5;
             background-color: rgba(0, 0, 0, 0.5);
             padding: 10px;
             border-radius: 8px;
+            color: white;
+            font-size: 1.2rem;
+            z-index: 1;
         }
 
-        /* Botones */
-        .button {
+        .button-container {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
             padding: 10px 20px;
-            font-size: 16px;
-            margin: 10px;
-            cursor: pointer;
-            border-radius: 5px;
+            margin: 5px;
             border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
         }
 
-        .button-red {
+        .btn-red {
             background-color: red;
-            color: white;
         }
 
-        .button-blue {
+        .btn-blue {
             background-color: blue;
-            color: white;
-        }
-
-        /* Estilo para ocultar contenido */
-        .hidden {
-            display: none;
         }
     </style>
 </head>
 
 <body>
-    <!-- Fondo interactivo desde GitHub -->
-    <iframe src="fluid.html"></iframe>
 
-    <!-- Título dinámico -->
-    <div class="BoxTitulo">
-        <h1 id="currentDateTime"></h1>
-    </div>
+    <!-- Simulación del ordenador -->
+    <div class="computer-screen">
+        <!-- Título dinámico -->
+        <div class="BoxTitulo">
+            <h1 id="currentDateTime"></h1>
+        </div>
 
-    <!-- Texto principal -->
-    <div class="mainText">
-        <p>
-            ¡Bienvenida!<br>
-            Quiero mencionarte un par de cosas antes de que continues: <br>
-            1.- Presiona el boton que dice: <span style="color: darkred;"><b>"Close Controls"</b></span> para que no te estorben. <br>
-            2.- El boton rojo ocultará todo el contenido de texto existente en la pagina. La finalidad de esto es que puedas utilizar el fondo para jugar un poco pasando el dedo por la pantalla. <br>
-            3.- El reloj que coloqué se actualiza en tiempo real, y en determinadas horas o momentos del dia; el mensaje que se muestra al inicio, sera diferente. <br>
-            4.- Al hacer click sobre el <span style="color: rgb(0, 100, 155);"><b>botón azúl</b></span> desplegarás el siguiente bloque que aloja el texto que no puedes leer. No lo hagas si no es momento. No creo que lo abras, pero en fin. Depende de ti. <br>
-        </p>
-    </div>
+        <!-- Contenido principal -->
+        <div class="screen-content">
+            <iframe src="https://paveldogreat.github.io/WebGL-Fluid-Simulation/"></iframe>
+        </div>
 
-    <!-- Botones -->
-    <div>
-        <button class="button button-red" id="toggleContentButton">Ocultar contenido</button>
-        <button class="button button-blue" id="toggleTextButton">Mostrar bloque oculto</button>
+        <!-- Texto principal -->
+        <div class="mainText">
+            <p>
+                ¡Bienvenida! Quiero mencionarte un par de cosas antes de que continues: <br>
+                1.- Presiona el botón que dice: <span style="color: darkred;"><b>"Close Controls"</b></span> para que no te estorben. <br>
+                2.- El botón rojo ocultará todo el contenido de texto existente en la página. La finalidad de esto es que puedas utilizar el fondo para jugar un poco pasando el dedo por la pantalla. <br>
+                3.- El reloj que coloqué se actualiza en tiempo real, y en determinadas horas o momentos del día; el mensaje que se muestra al inicio será diferente. <br>
+                4.- Al hacer clic sobre el <span style="color: rgb(0, 100, 155);"><b>botón azul</b></span> desplegarás el siguiente bloque que aloja el texto que no puedes leer. No lo hagas si no es momento. No creo que lo abras, pero en fin. Depende de ti. <br>
+            </p>
+        </div>
+
+        <!-- Botones -->
+        <div class="button-container">
+            <button class="btn btn-red" onclick="toggleContent()">Ocultar Contenido</button>
+            <button class="btn btn-blue" onclick="showHiddenText()">Mostrar Texto Oculto</button>
+        </div>
     </div>
 
     <script>
-        // Función para actualizar la hora y el mensaje dinámico
         function updateDateTime() {
             const now = new Date();
             const hours = now.getHours();
             const minutes = now.getMinutes();
             const seconds = now.getSeconds();
 
-            // Determinar el mensaje según la hora
             let message = '';
             if (hours === 0) message = 'Ya pasa de media noche, deberías dormir...';
             else if (hours === 1) message = '¿Sabías que AM significa Antes del Meridiano?';
@@ -126,47 +150,31 @@
             else if (hours >= 19 && hours < 23) message = 'Aun cuando esté ausente, siempre estaré presente. :)';
             else if (hours >= 23 && hours < 24) message = 'Cuéntame de tu día...';
 
-            // Formatear hora
             const formattedTime = `${hours % 12 || 12}:${minutes.toString().padStart(2, '0')}:<span id="seconds">${seconds.toString().padStart(2, '0')}</span> ${hours >= 12 ? 'PM' : 'AM'}`;
 
-            // Actualizar título dinámico
             document.getElementById('currentDateTime').innerHTML = `${formattedTime} - ${message}`;
         }
 
-        // Actualizar fecha y hora cada segundo
         setInterval(updateDateTime, 1000);
         updateDateTime();
 
-        // Botón para ocultar contenido
-        document.getElementById("toggleContentButton").addEventListener("click", function () {
-            document.body.classList.toggle("hidden");
-        });
+        // Función para ocultar contenido (texto y botones)
+        function toggleContent() {
+            const content = document.querySelector('.mainText');
+            const buttons = document.querySelector('.button-container');
+            const title = document.querySelector('.BoxTitulo');
 
-        // Botón para mostrar texto oculto
-        document.getElementById("toggleTextButton").addEventListener("click", function () {
-            const timePressed = new Date();
-            const data = {
-                action: "buttonPressed",
-                timePressed: timePressed.toISOString(),
-            };
+            content.style.display = 'none'; // Ocultar texto
+            buttons.style.display = 'none'; // Ocultar botones
+            title.style.display = 'none'; // Ocultar título
+        }
 
-            fetch("http://localhost:5000/button_pressed", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Notificación enviada:", data);
-            })
-            .catch((error) => {
-                console.error("Error al enviar la notificación:", error);
-            });
-        });
+        // Función para mostrar el texto oculto
+        function showHiddenText() {
+            alert('Texto oculto mostrado!');
+            // Aquí puedes agregar lógica para mostrar el contenido oculto
+        }
     </script>
-
 </body>
 
 </html>
